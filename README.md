@@ -5,8 +5,7 @@ REST API that fetches Apple App Store reviews, computes metrics, runs NLP (senti
 ## Features
 
 - **Data collection** (100 random reviews by default) via one of:
-  - `app-store-web-scraper` (scrapes the web App Store; no credentials)
-  - Apple RSS JSON feed (best-effort, may be inconsistent)
+  - Apple RSS JSON feed
 - **Processing**: text cleaning, fields extraction, safe error handling.
 - **Metrics**: average rating, rating distribution.
 - **Insights**: Transformers RoBERTa-based sentiment, and actionable recommendations.
@@ -37,12 +36,13 @@ uvicorn app.main:app --reload --port 8000
 
 Use *Apple’s numeric app ID* and a 2‑letter country code (e.g., `us`, `gb`, `ua`). You can find the app ID in the store URL, e.g. `https://apps.apple.com/app/id1459969523` → `1459969523`.
 
+#### For Nebula app
+
 ```bash
 curl -X POST "http://localhost:8000/collect" -H "Content-Type: application/json"   -d '{"app_id": "1459969523", "country": "us", "how_many": 100, "source": "auto"}'
 ```
 
 ### Get metrics & insights
-#### For Nebula
 ```bash
 curl "http://localhost:8000/metrics?app_id=1459969523&country=us"
 curl "http://localhost:8000/insights?app_id=1459969523&country=us"
@@ -54,7 +54,7 @@ curl -OJ 'http://127.0.0.1:8000/report?app_id=1459969523&country=us'
 
 ```
 
-#### For TikTok
+#### For TikTok app
 ```bash
 curl -X POST "http://localhost:8000/collect" -H "Content-Type: application/json"   -d '{"app_id": "835599320", "country": "us", "how_many": 100, "source": "auto"}'
 ```
@@ -95,15 +95,3 @@ docker build -t appstore-review-api .
 docker run -p 8000:8000 appstore-review-api
 ```
 
-## Video Demo (how-to)
-
-Record a 2–3 min demo with these steps:
-1) Start API: `uvicorn app.main:app --reload`
-2) POST `/collect` for an app id (e.g., 1459969523).
-3) Open `/metrics`, `/insights`, `/report` in the browser.
-4) Download `/reviews/download?format=csv`.
-5) Narrate how actionables reflect negative reviews.
-
-Use any recorder (OBS, Loom, QuickTime).
-
----
